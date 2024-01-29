@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express();
-const PORT = 4000;
 const http = require("http").Server(app);
 const cors = require("cors");
+
+const port = process.env.PORT || 4000;
 
 app.use(cors());
 
@@ -44,6 +45,6 @@ app.get("/api", (req, res) => {
   });
 });
 
-http.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+http.listen(port, () => {
+  console.log(`Server listening on ${port}`);
 });

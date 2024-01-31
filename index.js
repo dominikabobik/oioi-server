@@ -15,7 +15,7 @@ app.use(cors());
 //     methods: ["GET", "POST"],
 //   },
 // });
-const originUrl = "http://happy-river-0e9a44c10.4.azurestaticapps.net";
+const originUrl = "https://happy-river-0e9a44c10.4.azurestaticapps.net";
 // const originUrl = "http://localhost:3000";
 const socketIO = require("socket.io")(http, {
   cors: {

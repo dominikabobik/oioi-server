@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").Server(app);
 const cors = require("cors");
+// const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 
 const port = process.env.PORT || 4000;
 
@@ -11,6 +12,7 @@ const socketIO = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
     credentials: true,
+    methods: ["GET", "POST"],
   },
 });
 

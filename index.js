@@ -7,16 +7,25 @@ const cors = require("cors");
 const port = process.env.PORT || 4000;
 
 app.use(cors());
-
+//happy-river-0e9a44c10.4.azurestaticapps.net/
+// const socketIO = require("socket.io")(http, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//     methods: ["GET", "POST"],
+//   },
+// });
+const originUrl = "http://happy-river-0e9a44c10.4.azurestaticapps.net";
+// const originUrl = "http://localhost:3000";
 const socketIO = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: originUrl,
     credentials: true,
     methods: ["GET", "POST"],
   },
 });
 
-socketIO.on("connection", (socket) => {
+https: socketIO.on("connection", (socket) => {
   console.log(
     `ID: ${socket.id} Username: ${socket.handshake.auth.username} user just connected!`
   );

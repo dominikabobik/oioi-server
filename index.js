@@ -5,6 +5,7 @@ const cors = require("cors");
 // const { useAzureSocketIO } = require("@azure/web-pubsub-socket.io");
 
 const port = process.env.PORT || 4000;
+let users = [];
 
 app.use(cors());
 //happy-river-0e9a44c10.4.azurestaticapps.net/
@@ -30,15 +31,26 @@ https: socketIO.on("connection", (socket) => {
     `ID: ${socket.id} Username: ${socket.handshake.auth.username} user just connected!`
   );
 
-  const users = [];
+  let newUserList = [];
+
   for (let [id, socket] of socketIO.of("/").sockets) {
-    users.push({
+    newUserList.push({
       socketId: id,
       username: socket.handshake.auth.username,
     });
   }
 
-  socket.emit("users", users);
+  users = newUserList;
+
+  // users.push({ socketId: socket.id, username: socket.handshake.auth.username });
+
+  // socketIO.emit("users", {
+  //   socketId: socket.id,
+  //   username: socket.handshake.auth.username,
+  // });
+
+  socketIO.emit("users", users);
+  console.log("Emtting users", users);
 
   //sends the message to all the users on the server
   socket.on("message", (data) => {
@@ -46,8 +58,20 @@ https: socketIO.on("connection", (socket) => {
     socketIO.emit("messageResponse", data);
   });
 
+  socket.on("private-message", (data) => {
+    console.log("Message: ", data);
+    socket.to(data.toId).emit("private-message", data);
+    socket.emit("private-message", data);
+    // socketIO.emit("messageResponse", data);
+  });
+
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    console.log("User disconnected: ", socket.id);
+    let index = users.findIndex((e) => e.socketId === socket.id);
+    users.splice(index, 1);
+    console.log("New user list: ", users);
+    socketIO.emit("users", users);
+    socketIO.emit("user-disconnected", socket.id);
   });
 });
 
